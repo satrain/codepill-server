@@ -28,14 +28,24 @@ class Events extends Dbh {
         }
     }
 
+    protected function getEventById($eventId) {
+        $sql = "SELECT * FROM events WHERE event_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$eventId]);
+
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     protected function getAllEvents() {
         $sql = "SELECT * FROM events";
         $stmt = $this->connect()->query($sql);
         while($row = $stmt->fetch()) {
-            echo "Event heading: " . $row['event_heading'] . "<br>";
-            echo "Event image: <img src='" . $row['event_image_url'] . "'><br>";
+            echo "Event heading: <a href='single-event.php?id=" . $row['event_id'] . "'>" . $row['event_heading'] . "</a><br>";
+            echo "Event image: <img style='width: 250px; height: 150px;' src='" . $row['event_image_url'] . "'><br>";
             echo "Event execution date: " . $row['event_execute_date'] . "<br>";
-            echo "Event Location: " . $row['event_location'];
+            echo "Event Location: " . $row['event_location'] . "<br><hr>";
         }
     }
 
